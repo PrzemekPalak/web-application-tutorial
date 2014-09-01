@@ -3,7 +3,15 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Client list</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel-title">Client list</div>
+                    </div>
+                    <div class="col-md-6 text-right form-inline">
+                        <label for="search">Search:</label>
+                        <input id="search" class="form-control" ng-model="query">
+                    </div>
+                </div>
             </div>
             <table class="table table-hover table-bordered">
                 <thead>
@@ -14,7 +22,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="client in clients">
+                <tr ng-repeat="client in clients | filter:query">
                     <td>
                         {{client.name}}
                     </td>
