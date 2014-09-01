@@ -3,9 +3,11 @@
  */
 "use strict";
 
-var app = angular.module('tutorial', []);
+var app = angular.module('tutorial', ['controllers']);
 
-app.controller('ClientController', function ($scope, ClientService) {
+var controllers = angular.module('controllers', ['services']);
+
+controllers.controller('ClientController', function ($scope, ClientService) {
     $scope.message = '';
 
     $scope.submitClient = function(){
@@ -19,9 +21,11 @@ app.controller('ClientController', function ($scope, ClientService) {
     }
 });
 
-app.service('ClientService', function(){
+var services = angular.module('services', []);
+services.service('ClientService', function($log){
     var clients = [];
     var submitClient = function(client){
+        $log.info('client submited');
         clients.push(client);
     };
     return{
