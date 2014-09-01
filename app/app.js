@@ -8,6 +8,7 @@ var app = angular.module('tutorial', ['ngRoute', 'controllers']);
 app.config(function ($routeProvider) {
     $routeProvider
         .when('/client', {templateUrl: 'partials/client.html'})
+        .when('/clientList', {templateUrl: 'partials/clientList.html'})
         .otherwise({redirectTo: '/client'});
 });
 
