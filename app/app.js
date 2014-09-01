@@ -14,8 +14,9 @@ app.config(function ($routeProvider) {
 
 var controllers = angular.module('controllers', ['services']);
 
-controllers.controller('ClientController', function ($scope, ClientService) {
+controllers.controller('ClientController', function ($scope, $rootScope, ClientService) {
     $scope.message = '';
+    $rootScope.activeView = 'client';
 
     $scope.submitClient = function () {
         var client = {
@@ -26,6 +27,23 @@ controllers.controller('ClientController', function ($scope, ClientService) {
         ClientService.submitClient(client);
         $scope.message = 'Submited client: ' + $scope.name + ' ' + $scope.surname;
     }
+});
+
+controllers.controller('ClientListController', function ($scope, $rootScope) {
+    $rootScope.activeView = 'clientList';
+
+});
+
+controllers.controller('MenuController', function ($scope, $rootScope) {
+
+    $scope.getItemClass = function (name) {
+        if ($rootScope.activeView == name) {
+            return 'active';
+        } else {
+            return '';
+        }
+    };
+
 });
 
 var services = angular.module('services', []);
