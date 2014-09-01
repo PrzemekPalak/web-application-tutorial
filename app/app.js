@@ -29,9 +29,9 @@ controllers.controller('ClientController', function ($scope, $rootScope, ClientS
     }
 });
 
-controllers.controller('ClientListController', function ($scope, $rootScope) {
+controllers.controller('ClientListController', function ($scope, $rootScope, ClientService) {
     $rootScope.activeView = 'clientList';
-
+    $scope.clients = ClientService.getClients();
 });
 
 controllers.controller('MenuController', function ($scope, $rootScope) {
@@ -54,8 +54,14 @@ services.service('ClientService', function ($log) {
         $log.info('client submited');
         clients.push(client);
     };
+
+    var getClients = function () {
+        return clients;
+    };
+
     return{
-        submitClient: submitClient
+        submitClient: submitClient,
+        getClients: getClients
     }
 });
 
