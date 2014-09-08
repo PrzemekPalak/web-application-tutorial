@@ -29,4 +29,5 @@ steps:
   * menu controller
 11. STEP-10
   * client list grid, loop
-12. 
+12. STEP-11
+  * serch filter
