@@ -31,3 +31,7 @@ steps:
   * client list grid, loop
 12. STEP-11
   * serch filter
+  
+TODO:
+  - directives
+  - tests  
