@@ -1,4 +1,4 @@
-angularjs-tutorial
+angularjs + vertx + mongodb - web application tutorial in steps
 ==================
 
 AngularJS tutorial
