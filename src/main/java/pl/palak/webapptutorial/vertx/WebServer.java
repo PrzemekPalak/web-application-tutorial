@@ -15,7 +15,8 @@ public class WebServer extends Verticle{
         vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
             @Override
             public void handle(HttpServerRequest httpServerRequest) {
-                httpServerRequest.response().end("Hello world!");
+                String file = httpServerRequest.path().equals("/") ? "index.html" : httpServerRequest.path();
+                httpServerRequest.response().sendFile("web/" + file);
             }
         }).listen(8080);
     }

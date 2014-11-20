@@ -37,6 +37,11 @@ AngularJS
 Vertx
 1. VERTX-STEP-0
   * maven project
+2. VERTX-STEP-1
+  * maven dependencies
+  * hello world http server
+3. VERTX-STEP-2
+  * http server - serve static files
   
 TODO:
   - angularjs directives
