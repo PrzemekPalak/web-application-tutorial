@@ -7,6 +7,8 @@ git checkout STEP-#
 
 steps:
 
+AngularJS
+
 1. STEP-0
   * sceleton
 2. STEP-1
@@ -31,7 +33,11 @@ steps:
   * client list grid, loop
 12. STEP-11
   * serch filter
+
+Vertx
+1. VERTX-STEP-0
+  * maven project
   
 TODO:
-  - directives
-  - tests  
+  - angularjs directives
+  - angularjs tests
