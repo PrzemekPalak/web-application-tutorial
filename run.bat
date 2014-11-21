@@ -1,1 +1,1 @@
-vertx run src\main\java\pl\palak\webapptutorial\vertx\WebServer.java
+vertx run src\main\java\pl\palak\webapptutorial\vertx\WebServer.java -cluster

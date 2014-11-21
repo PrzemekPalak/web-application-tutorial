@@ -1,1 +1,1 @@
-vertx run src\main\resource\pongVerticle.js
+vertx run src\main\resource\pongVerticle.js -cluster

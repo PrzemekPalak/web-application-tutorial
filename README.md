@@ -47,6 +47,8 @@ Vertx
   * route matcher
 5. VERTX-STEP-4
   * even bus send
+6. VERTX-STEP-5
+  * even bus module
   
 TODO:
   - angularjs directives
