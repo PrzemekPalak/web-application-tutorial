@@ -35,6 +35,7 @@ AngularJS
   * serch filter
 
 Vertx
+
 1. VERTX-STEP-0
   * maven project
 2. VERTX-STEP-1
@@ -42,6 +43,8 @@ Vertx
   * hello world http server
 3. VERTX-STEP-2
   * http server - serve static files
+3. VERTX-STEP-3
+  * route matcher
   
 TODO:
   - angularjs directives
