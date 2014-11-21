@@ -49,6 +49,10 @@ Vertx
   * even bus send
 6. VERTX-STEP-5
   * even bus module
+7. VERTX-STEP-6
+  * even bus receive
+8. VERTX-STEP-7
+  * even bus module reply
   
 TODO:
   - angularjs directives
