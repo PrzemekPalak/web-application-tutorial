@@ -31,7 +31,12 @@ controllers.controller('ClientController', function ($scope, $rootScope, ClientS
 
 controllers.controller('ClientListController', function ($scope, $rootScope, ClientService) {
     $rootScope.activeView = 'clientList';
-    $scope.clients = ClientService.getClients();
+    ClientService.getClients().then(function (data) {
+        $scope.clients = data.clientList;
+    },
+    function (errorMessage) {
+        $scope.message = errorMessage;
+    });
 });
 
 controllers.controller('MenuController', function ($scope, $rootScope) {
@@ -48,18 +53,30 @@ controllers.controller('MenuController', function ($scope, $rootScope) {
 
 var services = angular.module('services', []);
 
-services.service('ClientService', function ($log) {
-    var clients = [];
+services.service('ClientService', function ($log, $http, $q) {
+
     var submitClient = function (client) {
-        $log.info('client submited');
-        clients.push(client);
+        $http.post("/api/client", client).error(function () {
+            $log.error('error submitting client');
+        });
+        $log.info('client submitted');
     };
 
     var getClients = function () {
-        return clients;
+
+        var deferred = $q.defer();
+
+        $http.get("/api/clientList").success(function (data) {
+            deferred.resolve(data);
+        }).error(function () {
+            $log.error('error getting client list');
+            deferred.reject("Error getting client list");
+        });
+
+        return deferred.promise;
     };
 
-    return{
+    return {
         submitClient: submitClient,
         getClients: getClients
     }

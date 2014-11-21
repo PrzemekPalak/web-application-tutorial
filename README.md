@@ -53,6 +53,10 @@ Vertx
   * even bus receive
 8. VERTX-STEP-7
   * even bus module reply
+9. VERTX-STEP-8
+  * clientList service
+10. VERTX-STEP-9
+  * submitClient service
   
 TODO:
   - angularjs directives
