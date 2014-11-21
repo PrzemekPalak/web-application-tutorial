@@ -18,33 +18,38 @@ var clientsRepository = function ($log) {
         return clients;
     };
 
-    return{
+    return {
         submitClient: submitClient,
         getClients: getClients
     }
 }(logger);
 
 
-var pongHandler = function(message, replier) {
+var pongHandler = function (message, replier) {
     logger.info('pong');
     logger.info('I received a message ' + JSON.stringify(message));
-    if(message.msg === 'ping' ){
+    if (message.msg === 'ping') {
 
         logger.info('replaying pong');
-        replier({msg:'pong'});
+        replier({msg: 'pong'});
 
     }
 };
 
-var clientListHandler = function(message, replier) {
+var clientListHandler = function (message, replier) {
     var res = {clientList: clientsRepository.getClients()};
     logger.info('Returning client list');
     replier(res);
+};
+
+var submitClientHandler = function (message) {
+    clientsRepository.submitClient(message);
 };
 
 eb.registerHandler('pong', pongHandler);
 
 eb.registerHandler('clientList', clientListHandler);
 
+eb.registerHandler('submitClient', submitClientHandler);
 
 logger.info('Pong verticle started');

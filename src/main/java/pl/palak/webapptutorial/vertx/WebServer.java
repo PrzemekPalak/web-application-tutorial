@@ -3,6 +3,7 @@ package pl.palak.webapptutorial.vertx;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Handler;
+import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.http.HttpServer;
@@ -58,6 +59,24 @@ public class WebServer extends Verticle {
                         }
                     }
                 });
+            }
+        });
+
+        routeMatcher.post("/api/client", new Handler<HttpServerRequest>() {
+            @Override
+            public void handle(final HttpServerRequest httpServerRequest) {
+
+                httpServerRequest.bodyHandler(new Handler<Buffer>() {
+                    public void handle(Buffer body) {
+                        // The entire body has now been received
+                        String bodyStr =  body.getString(0, body.length());
+                        JsonObject clientJson = new JsonObject(bodyStr);
+                        //send with timeout
+                        eventBus.send("submitClient", clientJson);
+                    }
+                });
+
+                httpServerRequest.response().end();
             }
         });
 
