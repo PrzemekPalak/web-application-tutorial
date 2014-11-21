@@ -2,6 +2,7 @@ package pl.palak.webapptutorial.vertx;
 
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.EventBus;
+import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.http.HttpServer;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
@@ -24,15 +25,20 @@ public class WebServer extends Verticle {
 
         routeMatcher.all("/api/ping", new Handler<HttpServerRequest>() {
             @Override
-            public void handle(HttpServerRequest httpServerRequest) {
+            public void handle(final HttpServerRequest httpServerRequest) {
                 container.logger().info("ping");
 
                 JsonObject msg = new JsonObject();
                 msg.putString("msg", "ping");
 
-                eventBus.send("pong", msg);
+                eventBus.send("pong", msg, new Handler<Message<JsonObject>>() {
+                    @Override
+                    public void handle(Message<JsonObject> message) {
+                        container.logger().info("Received message form event bus module: "+message.body().encodePrettily());
+                        httpServerRequest.response().end(message.body().encodePrettily());
+                    }
+                });
 
-                httpServerRequest.response().end("hello api!");
             }
         });
 
