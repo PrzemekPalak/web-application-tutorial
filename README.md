@@ -43,8 +43,10 @@ Vertx
   * hello world http server
 3. VERTX-STEP-2
   * http server - serve static files
-3. VERTX-STEP-3
+4. VERTX-STEP-3
   * route matcher
+5. VERTX-STEP-4
+  * even bus send
   
 TODO:
   - angularjs directives

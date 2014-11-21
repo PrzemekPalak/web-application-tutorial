@@ -1,0 +1,1 @@
+vertx run src\main\resource\pongVerticle.js
