@@ -7,6 +7,8 @@ import org.vertx.java.platform.Verticle;
 /**
  *Hello world http server
  *
+ *  -conf conf.json
+ *  -instances 10
  */
 public class WebServer extends Verticle{
 
