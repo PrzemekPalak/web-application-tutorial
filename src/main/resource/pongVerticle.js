@@ -9,7 +9,7 @@ var eb = vertx.eventBus;
 
 var pongHandler = function(message) {
     logger.info('pong');
-    logger.info('I received a message ' + message);
+    logger.info('I received a message ' + JSON.stringify(message));
 };
 
 eb.registerHandler('pong', pongHandler);
