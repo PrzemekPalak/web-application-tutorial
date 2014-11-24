@@ -11,15 +11,16 @@
 </head>
 <body ng-app="tutorial">
 
-<div class="row">
+<div class="row" style="margin-bottom: 5px;">
     <div class="col-lg-3">
 
     </div>
     <div class="col-lg-6">
-        <h2>Angularjs tutorial</h2>
+        <div class="left" ng-controller="NotificationController">
+            <h2><span class="pull-left">Angularjs tutorial</span> <span class="pull-right label label-info right">{{message}}</span></h2>
+        </div>
     </div>
     <div class="col-lg-3">
-
     </div>
 </div>
 <div class="row">
@@ -43,6 +44,8 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/angular.min.js"></script>
 <script src="js/angular-route.min.js"></script>
+<script src="js/sockjs-0.3.4.min.js"></script>
+<script src="js/vertxbus-2.1.js"></script>
 <script src="app/app.js"></script>
 </body>
 </html>

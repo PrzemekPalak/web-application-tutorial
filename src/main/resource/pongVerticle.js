@@ -44,6 +44,10 @@ var clientListHandler = function (message, replier) {
 
 var submitClientHandler = function (message) {
     clientsRepository.submitClient(message);
+    var notificationMsg = {
+        msg : 'Client '+message.name+' '+message.surname+' submited.'
+    };
+    eb.publish('notifications', notificationMsg)
 };
 
 eb.registerHandler('pong', pongHandler);

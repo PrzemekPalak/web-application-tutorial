@@ -32,11 +32,11 @@ controllers.controller('ClientController', function ($scope, $rootScope, ClientS
 controllers.controller('ClientListController', function ($scope, $rootScope, ClientService) {
     $rootScope.activeView = 'clientList';
     ClientService.getClients().then(function (data) {
-        $scope.clients = data.clientList;
-    },
-    function (errorMessage) {
-        $scope.message = errorMessage;
-    });
+            $scope.clients = data.clientList;
+        },
+        function (errorMessage) {
+            $scope.message = errorMessage;
+        });
 });
 
 controllers.controller('MenuController', function ($scope, $rootScope) {
@@ -48,6 +48,25 @@ controllers.controller('MenuController', function ($scope, $rootScope) {
             return '';
         }
     };
+
+});
+
+controllers.controller('NotificationController', function ($scope, $log) {
+    var eb = new vertx.EventBus('/eventbus');
+
+    eb.onopen = function () {
+
+        eb.registerHandler('notifications', function (message) {
+
+            $log.info('received a message: ' + JSON.stringify(message));
+
+            $scope.$apply(function(){
+                $scope.message = message.msg;
+            });
+
+        });
+
+    }
 
 });
 
