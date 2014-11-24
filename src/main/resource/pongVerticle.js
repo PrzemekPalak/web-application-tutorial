@@ -28,10 +28,10 @@ var clientsRepository = function ($log) {
 var pongHandler = function(message, replier) {
     logger.info('pong');
     logger.info('I received a message ' + JSON.stringify(message));
-    if(message.msg === 'ping' ){
+    if (message.msg === 'ping') {
 
         logger.info('replaying pong');
-        replier({msg:'pong'});
+        replier({msg: 'pong'});
 
     }
 };
