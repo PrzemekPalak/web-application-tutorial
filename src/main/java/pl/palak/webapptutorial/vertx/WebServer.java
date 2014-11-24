@@ -9,6 +9,7 @@ import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.http.HttpServer;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
+import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.platform.Verticle;
 
@@ -22,11 +23,89 @@ public class WebServer extends Verticle {
         container.logger().info("Starting web server");
         HttpServer httpServer = vertx.createHttpServer();
 
+        //init route matcher
+        RouteMatcher routeMatcher = getRouteMatcher();
+        httpServer.requestHandler(routeMatcher);
+
+        //create sockJs Server
+        JsonObject config = new JsonObject().putString("prefix", "/eventbus");
+        JsonArray noPermitted = new JsonArray();
+        noPermitted.add(new JsonObject());
+        vertx.createSockJSServer(httpServer).bridge(config, noPermitted, noPermitted);
+
+        //start server
+        httpServer.listen(8080);
+        container.logger().info("Web server started");
+    }
+
+    private RouteMatcher getRouteMatcher() {
         RouteMatcher routeMatcher = new RouteMatcher();
 
         final EventBus eventBus = vertx.eventBus();
 
-        routeMatcher.all("/api/ping", new Handler<HttpServerRequest>() {
+        routeMatcher.all("/api/ping", getPingHandler(eventBus));
+
+        routeMatcher.get("/api/clientList", getClientListHandler(eventBus));
+
+        routeMatcher.post("/api/client", getSubmitClientHandler(eventBus));
+
+        routeMatcher.noMatch(getStaticFilesHandler());
+
+        return routeMatcher;
+    }
+
+    private Handler<HttpServerRequest> getStaticFilesHandler() {
+        return new Handler<HttpServerRequest>() {
+            @Override
+            public void handle(HttpServerRequest httpServerRequest) {
+                String file = httpServerRequest.path().equals("/") ? "index.html" : httpServerRequest.path();
+                httpServerRequest.response().sendFile("web/" + file);
+            }
+        };
+    }
+
+    private Handler<HttpServerRequest> getSubmitClientHandler(final EventBus eventBus) {
+        return new Handler<HttpServerRequest>() {
+            @Override
+            public void handle(final HttpServerRequest httpServerRequest) {
+
+                httpServerRequest.bodyHandler(new Handler<Buffer>() {
+                    public void handle(Buffer body) {
+                        // The entire body has now been received
+                        String bodyStr = body.getString(0, body.length());
+                        JsonObject clientJson = new JsonObject(bodyStr);
+
+                        //call event bus service
+                        eventBus.send("submitClient", clientJson);
+                    }
+                });
+
+                httpServerRequest.response().end();
+            }
+        };
+    }
+
+    private Handler<HttpServerRequest> getClientListHandler(final EventBus eventBus) {
+        return new Handler<HttpServerRequest>() {
+            @Override
+            public void handle(final HttpServerRequest httpServerRequest) {
+                //send with timeout
+                eventBus.sendWithTimeout("clientList", new JsonObject(), 100, new AsyncResultHandler<Message<JsonObject>>() {
+                    @Override
+                    public void handle(AsyncResult<Message<JsonObject>> messageAsyncResult) {
+                        if(messageAsyncResult.failed()){
+                            httpServerRequest.response().setStatusCode(500).end();
+                        } else {
+                            httpServerRequest.response().end(messageAsyncResult.result().body().encodePrettily());
+                        }
+                    }
+                });
+            }
+        };
+    }
+
+    private Handler<HttpServerRequest> getPingHandler(final EventBus eventBus) {
+        return new Handler<HttpServerRequest>() {
             @Override
             public void handle(final HttpServerRequest httpServerRequest) {
                 container.logger().info("ping");
@@ -43,55 +122,7 @@ public class WebServer extends Verticle {
                 });
 
             }
-        });
-
-        routeMatcher.get("/api/clientList", new Handler<HttpServerRequest>() {
-            @Override
-            public void handle(final HttpServerRequest httpServerRequest) {
-                //send with timeout
-                eventBus.sendWithTimeout("clientList", new JsonObject(), 100, new AsyncResultHandler<Message<JsonObject>>() {
-                    @Override
-                    public void handle(AsyncResult<Message<JsonObject>> messageAsyncResult) {
-                        if(messageAsyncResult.failed()){
-                            httpServerRequest.response().setStatusCode(500).end();
-                        } else {
-                            httpServerRequest.response().end(messageAsyncResult.result().body().encodePrettily());
-                        }
-                    }
-                });
-            }
-        });
-
-        routeMatcher.post("/api/client", new Handler<HttpServerRequest>() {
-            @Override
-            public void handle(final HttpServerRequest httpServerRequest) {
-
-                httpServerRequest.bodyHandler(new Handler<Buffer>() {
-                    public void handle(Buffer body) {
-                        // The entire body has now been received
-                        String bodyStr =  body.getString(0, body.length());
-                        JsonObject clientJson = new JsonObject(bodyStr);
-                        //send with timeout
-                        eventBus.send("submitClient", clientJson);
-                    }
-                });
-
-                httpServerRequest.response().end();
-            }
-        });
-
-        routeMatcher.noMatch(new Handler<HttpServerRequest>() {
-            @Override
-            public void handle(HttpServerRequest httpServerRequest) {
-                String file = httpServerRequest.path().equals("/") ? "index.html" : httpServerRequest.path();
-                httpServerRequest.response().sendFile("web/" + file);
-            }
-        });
-
-        httpServer.requestHandler(routeMatcher);
-
-        httpServer.listen(8080);
-        container.logger().info("Web server started");
+        };
     }
 
 }

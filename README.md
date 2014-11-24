@@ -57,6 +57,8 @@ Vertx
   * clientList service
 10. VERTX-STEP-9
   * submitClient service
+11. VERTX-STEP-10
+  * GUI service to use ajax calls to vertx server
   
 TODO:
   - angularjs directives
