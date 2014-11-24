@@ -7,13 +7,13 @@ logger.info('Starting pong verticle');
 
 var eb = vertx.eventBus;
 
-var pongHandler = function(message, replier) {
+var pongHandler = function (message, replier) {
     logger.info('pong');
     logger.info('I received a message ' + JSON.stringify(message));
-    if(message.msg === 'ping' ){
+    if (message.msg === 'ping') {
 
         logger.info('replaying pong');
-        replier({msg:'pong'});
+        replier({msg: 'pong'});
 
     }
 };
