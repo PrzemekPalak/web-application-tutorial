@@ -93,7 +93,7 @@ public class WebServer extends Verticle {
                 eventBus.sendWithTimeout("clientList", new JsonObject(), 100, new AsyncResultHandler<Message<JsonObject>>() {
                     @Override
                     public void handle(AsyncResult<Message<JsonObject>> messageAsyncResult) {
-                        if(messageAsyncResult.failed()){
+                        if (messageAsyncResult.failed()) {
                             httpServerRequest.response().setStatusCode(500).end();
                         } else {
                             httpServerRequest.response().end(messageAsyncResult.result().body().encodePrettily());
