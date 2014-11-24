@@ -52,7 +52,7 @@ public class WebServer extends Verticle {
                 eventBus.sendWithTimeout("clientList", new JsonObject(), 100, new AsyncResultHandler<Message<JsonObject>>() {
                     @Override
                     public void handle(AsyncResult<Message<JsonObject>> messageAsyncResult) {
-                        if(messageAsyncResult.failed()){
+                        if (messageAsyncResult.failed()) {
                             httpServerRequest.response().setStatusCode(500).end();
                         } else {
                             httpServerRequest.response().end(messageAsyncResult.result().body().encodePrettily());
@@ -65,18 +65,19 @@ public class WebServer extends Verticle {
         routeMatcher.post("/api/client", new Handler<HttpServerRequest>() {
             @Override
             public void handle(final HttpServerRequest httpServerRequest) {
+                //return empty response
+                httpServerRequest.response().end();
 
                 httpServerRequest.bodyHandler(new Handler<Buffer>() {
                     public void handle(Buffer body) {
                         // The entire body has now been received
-                        String bodyStr =  body.getString(0, body.length());
+                        String bodyStr = body.getString(0, body.length());
                         JsonObject clientJson = new JsonObject(bodyStr);
                         //send with timeout
                         eventBus.send("submitClient", clientJson);
                     }
                 });
 
-                httpServerRequest.response().end();
             }
         });
 
