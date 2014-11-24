@@ -59,7 +59,12 @@ Vertx
   * submitClient service
 11. VERTX-STEP-10
   * GUI service to use ajax calls to vertx server
+12. VERTX-STEP-11
+  * event bus bridge - sockjs
   
 TODO:
   - angularjs directives
   - angularjs tests
+  - vertx module
+  - vertx config json
+  - vertx fat jar
